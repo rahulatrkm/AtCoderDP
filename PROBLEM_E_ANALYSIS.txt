@@ -1,0 +1,95 @@
+==========================================
+PROBLEM E: KNAPSACK 2 - TEST REPORT
+==========================================
+
+TEST RESULTS:
+✓ Small W cases (W ≤ 1000): PASSED (6/6)
+✗ Large W cases (W ≥ 10^7): FAILED (4/4)
+
+CRITICAL ISSUE FOUND:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your current code uses: dp[W+1] array
+
+This approach FAILS when W is large because:
+
+1. MEMORY ISSUE:
+   - For W = 10^9, you need dp[1000000001] array
+   - Each element is 8 bytes (Python int) 
+   - Total memory: ~8 GB - CRASH! ❌
+   
+2. TIME ISSUE:
+   - Time complexity: O(N × W)
+   - For N=100, W=10^9: 10^11 operations
+   - Takes several minutes - TIMEOUT! ❌
+
+CONSTRAINT ANALYSIS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem D (Knapsack 1):
+  - W ≤ 10^5    ✓ dp[W+1] works
+  - v ≤ 10^9    
+  
+Problem E (Knapsack 2):
+  - W ≤ 10^9    ✗ dp[W+1] FAILS
+  - v ≤ 10^3    ✓ Use this constraint!
+
+REQUIRED SOLUTION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Change DP dimension from WEIGHT to VALUE:
+
+Current (WRONG for Problem E):
+  dp[w] = maximum value achievable with weight ≤ w
+  
+Required (CORRECT for Problem E):
+  dp[v] = minimum weight needed to achieve value = v
+  
+Why this works:
+  - Max possible value = N × max(v_i) = 100 × 1000 = 100,000
+  - Array size: dp[100001] (always safe) ✓
+  - Time: O(N × total_value) = O(100 × 100,000) = 10^7 ✓
+  - Memory: O(100,000) ~ 800 KB ✓
+
+ALGORITHM:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Initialize dp array:
+   dp[0] = 0 (no weight needed for value 0)
+   dp[v] = infinity for v > 0
+   
+2. For each item (weight=w_i, value=v_i):
+   For each value v from max_value down to v_i:
+     dp[v] = min(dp[v], dp[v - v_i] + w_i)
+     
+3. Answer: max(v) where dp[v] <= W
+
+PERFORMANCE COMPARISON:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test Case: N=100, W=10^9, v_i=1000
+
+Current Approach (dp on weight):
+  Memory: 8 GB          ❌ CRASH
+  Time: 10^11 ops       ❌ TIMEOUT
+  
+Required Approach (dp on value):  
+  Memory: 800 KB        ✓ PASS
+  Time: 10^7 ops        ✓ PASS (~0.1s)
+
+CONCLUSION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Your code works for small W (≤ 10^5)
+✗ Your code FAILS for large W (≥ 10^7)
+
+To solve Problem E correctly, you MUST:
+1. Change DP from dp[weight] to dp[value]
+2. Track minimum weight for each value
+3. Find maximum value where weight ≤ W
+
+This is the KEY difference between:
+  - Problem D (Knapsack 1): W is small, use dp[W]
+  - Problem E (Knapsack 2): W is large, use dp[value]
+  
+==========================================
