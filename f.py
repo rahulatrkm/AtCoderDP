@@ -29,13 +29,3 @@ def helper(s, t):
 s = input().strip()
 t = input().strip()
 print(helper(s, t))
-
-s = "axyb"
-t = "abyxb"
-print(helper(s, t))  # Expected: 3 (aby)
-
-print(helper("aa", "xayaz"))
-
-print(helper("a", "x"))
-
-print(helper("abracadabra", "avadakedavra"))
