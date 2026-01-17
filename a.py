@@ -3,18 +3,6 @@ PS - https://atcoder.jp/contests/dp/tasks/dp_a
 '''
 
 def frog_jump_cost(n, heights):
-    # dp = [0] * n
-    # dp[0] = 0  # Starting point, no cost
-
-    # for i in range(1, n):
-    #     cost_one_step = dp[i - 1] + abs(heights[i] - heights[i - 1])
-    #     cost_two_steps = float('inf')
-    #     if i > 1:
-    #         cost_two_steps = dp[i - 2] + abs(heights[i] - heights[i - 2])
-    #     dp[i] = min(cost_one_step, cost_two_steps)
-
-    # return dp[n - 1]
-
     dp = [float('inf')]*n
     dp[0] = 0
     dp[1] = abs(heights[1] - heights[0])
@@ -22,6 +10,9 @@ def frog_jump_cost(n, heights):
         dp[i] = min(dp[i], dp[i-1] + abs(heights[i-1] - heights[i]), dp[i-2] + abs(heights[i-2] - heights[i]))
     return dp[-1]
     
+n = int(input())
+ht = list(map(int, input().split()))
+print(frog_jump_cost(n, ht))
 
 # Original AtCoder Sample Test Cases
 print("=== AtCoder Sample Test Cases ===")

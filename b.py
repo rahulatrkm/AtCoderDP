@@ -10,6 +10,10 @@ def frog_jump_cost(n, k, heights):
             dp[i] = min(dp[i], dp[i-j] + abs(heights[i] - heights[i-j]))
     return dp[-1]
 
+n, k = map(int, input().split())
+ht = list(map(int, input().split()))
+print(frog_jump_cost(n, k, ht))
+
 # Original AtCoder Sample Test Cases
 print("=== AtCoder Sample Test Cases ===")
 n = 5

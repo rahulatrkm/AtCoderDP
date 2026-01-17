@@ -2,8 +2,11 @@
 ps - https://atcoder.jp/contests/dp/tasks/dp_o
 '''
 
-curr = set()
-def helper(idx):
+from functools import lru_cache
+
+@lru_cache(None)
+def helper(idx, curr):
+    # curr = set(curr)
     mod = 10**9+7
     # n = len(arr)
     # if idx == n:
@@ -12,7 +15,7 @@ def helper(idx):
     # for i in range(n):
     #     if arr[idx][i] and i not in curr:
     #         curr.add(i)
-    #         ans += helper(idx+1)
+    #         ans += helper(idx+1, tuple(curr))
     #         curr.remove(i)
     # return ans%mod
 
@@ -32,5 +35,5 @@ n = int(input())
 arr = []
 for _ in range(n):
     arr.append(list(map(int, input().split())))
-print(helper(0))
+print(helper(0, tuple()))
         

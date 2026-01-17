@@ -26,6 +26,10 @@ def helper(s, t):
 
     return "".join(lcs[::-1])
 
+s = input().strip()
+t = input().strip()
+print(helper(s, t))
+
 s = "axyb"
 t = "abyxb"
 print(helper(s, t))  # Expected: 3 (aby)

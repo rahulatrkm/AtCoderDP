@@ -2,18 +2,16 @@
 ps - https://atcoder.jp/contests/dp/tasks/dp_n
 '''
 
-def helper(arr):
-    # n = len(arr)
-    # if n == 1:
+from functools import lru_cache
+
+@lru_cache(None)
+def helper(i, j):
+    # if i == j:
     #     return 0
-    # curr = 0
-    # for i in range(n-1):
-    #     if arr[i]+arr[i+1] < arr[curr]+arr[curr+1]:
-    #         curr = i
-    # val = arr[curr] + arr[curr+1]
-    # del arr[curr]
-    # arr[curr] = val
-    # return val + helper(arr)
+    # ans = float('inf')
+    # for k in range(i, j):
+    #     ans = min(ans, helper(i, k) + helper(k+1, j))
+    # return ans + sum(arr[i:j+1])
 
     n = len(arr)
     dp = [[0]*n for _ in range(n)]
@@ -34,7 +32,7 @@ def helper(arr):
 
 n = int(input())
 arr = list(map(int, input().split()))
-print(helper(arr))
+print(helper(0, n-1))
 
 # n = 400
 # arr = [10**9]*n

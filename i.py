@@ -1,7 +1,9 @@
 '''
 ps - https://atcoder.jp/contests/dp/tasks/dp_i
 '''
+from functools import lru_cache
 
+@lru_cache(None)
 def helper(idx, cnt):
     # n = len(probabilities)
     # if idx == n:
@@ -27,4 +29,4 @@ def helper(idx, cnt):
 
 n = int(input())
 probabilities = list(map(float, input().split()))
-print(helper(0, 0))
+print(f"{helper(0, 0):.10f}")

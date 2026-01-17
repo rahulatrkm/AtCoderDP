@@ -4,19 +4,48 @@ ps - https://atcoder.jp/contests/dp/tasks/dp_e
 
 from functools import lru_cache
 
+# @lru_cache(None)
+# def helper(idx, v):
+#     if v == 0:
+#         return 0
+#     if idx == n:
+#         return float('inf')
+    
+#     res = helper(idx + 1, v)
+#     item_w, item_v = items[idx]
+#     if item_v <= v:
+#         res = min(res, helper(idx + 1, v - item_v) + item_w)
+    
+#     return res
 
-@lru_cache(None)
-def helper(idx, w):
-    if idx == len(wv):
-        return 0
-    item_w, item_v = wv[idx]
-    if item_w <= w:
-        return max(helper(idx + 1, w), helper(idx + 1, w - item_w) + item_v)
-    return helper(idx + 1, w)
+def helper(items, n, w):
+    dp = [float('inf')] * (max_value + 1)
+    dp[0] = 0
+    for item_w, item_v in items:
+        curr = dp.copy()
+        for val in range(item_v, max_value + 1):
+            dp[val] = min(dp[val], curr[val - item_v] + item_w)
+    return dp
 
 n, w = map(int, input().split())
-wv = []
+items = []
+max_value = 0
 for _ in range(n):
-    wv.append(tuple(map(int, input().split())))
+    wi, vi = map(int, input().split())
+    items.append((wi, vi))
+    max_value += vi
 
-print(helper(0, w))
+# Find maximum value v such that helper(0, v) <= w
+# ans = 0
+# for v in range(max_value + 1):
+#     if helper(0, v) <= w:
+#         ans = v
+
+# print(ans)
+
+dp = helper(items, n, w)
+ans = 0
+for v in range(max_value + 1):
+    if dp[v] <= w:
+        ans = v
+print(ans)

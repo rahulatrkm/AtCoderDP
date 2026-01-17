@@ -1,9 +1,9 @@
 '''
 ps - https://atcoder.jp/contests/dp/tasks/dp_p
 '''
-# from functools import lru_cache
-# import sys
-# sys.setrecursionlimit(10**7)
+from functools import lru_cache
+import sys
+sys.setrecursionlimit(10**7)
 
 def helper(adj):
     mod = 10**9+7
@@ -15,13 +15,14 @@ def helper(adj):
     #         for ne in adj[node]:
     #             if ne == par:
     #                 continue
-    #             ans *= dp(ne, 1, node)
-    #         return ans
+    #             ans *= dp(ne, 1, node) % mod
+    #         return ans % mod
     #     for ne in adj[node]:
     #         if ne == par:
     #             continue
-    #         ans *= (dp(ne, 0, node) + dp(ne, 1, node))
-    #     return ans
+    #         ans *= (dp(ne, 0, node) + dp(ne, 1, node)) % mod
+    #     return ans % mod
+    # return (dp(1, 0, -1) + dp(1, 1, -1)) % mod
 
     dp = [[0, 0] for _ in range(len(adj)+1)]
     def dfs(node, par):

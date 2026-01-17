@@ -1,39 +1,53 @@
 '''
 ps - https://atcoder.jp/contests/dp/tasks/dp_s
-Digit DP: Count numbers from 1 to K where digit sum is divisible by D
 '''
-from functools import lru_cache
+
 import sys
 sys.setrecursionlimit(20000)
 
-def helper(k, d):
-    digits = [int(x) for x in k]
-    n = len(digits)
-    mod = 10**9 + 7
-    
-    @lru_cache(None)
-    def dp(pos, sum_mod, tight, started):
-        # Base case: processed all digits
-        if pos == n:
-            # Valid if digit sum is divisible by D and we've started (not 0)
-            return 1 if started and sum_mod == 0 else 0
-        
-        # Determine digit limit
-        limit = digits[pos] if tight else 9
-        
-        result = 0
-        for digit in range(0, limit + 1):
-            new_tight = tight and (digit == limit)
-            new_started = started or (digit > 0)
-            new_sum = (sum_mod + digit) % d if new_started else 0
-            
-            result = (result + dp(pos + 1, new_sum, new_tight, new_started)) % mod
-        
-        return result
-    
-    return dp(0, 0, True, False)
-
 k = input()
 d = int(input())
-print(helper(k, d))
-    
+mod = 10**9+7
+
+# Iterative DP (faster)
+digits = [int(x) for x in k]
+n = len(digits)
+
+# dp[pos][sum_mod][tight] = count of valid numbers
+dp = [[[0]*2 for _ in range(d)] for _ in range(n+1)]
+dp[0][0][1] = 1
+
+for pos in range(n):
+    for sum_mod in range(d):
+        for tight in range(2):
+            if dp[pos][sum_mod][tight] == 0:
+                continue
+            
+            limit = digits[pos] if tight else 9
+            
+            for digit in range(limit + 1):
+                new_sum = (sum_mod + digit) % d
+                new_tight = 1 if (tight and digit == limit) else 0
+                dp[pos+1][new_sum][new_tight] = (dp[pos+1][new_sum][new_tight] + dp[pos][sum_mod][tight]) % mod
+
+# Sum all combinations where sum_mod == 0, subtract 1 for zero
+ans = (dp[n][0][0] + dp[n][0][1] - 1) % mod
+print(ans)
+
+# Recursive version (kept for reference, commented out)
+# memo = {}
+# def helper(pos, sum_mod, tight):
+#   global k, d, mod, memo
+#   if (pos, sum_mod, tight) in memo:
+#     return memo[(pos, sum_mod, tight)]
+#   
+#   if pos == len(k):
+#     return 1 if sum_mod%d == 0 else 0
+#   
+#   limit = int(k[pos]) if tight else 9
+#   ans = 0
+#   for i in range(limit+1):
+#     ans = (ans + helper(pos+1, (sum_mod+i)%d, tight and i==limit)) % mod
+#   memo[(pos, sum_mod, tight)] = ans
+#   return ans
+# print((helper(0, 0, True)-1)%mod)
