@@ -1,38 +1,49 @@
 '''
 ps - https://atcoder.jp/contests/dp/tasks/dp_r
+Matrix Exponentiation: A^K gives walks of length K
 '''
 
-def solve():
-    MOD = 10**9 + 7
+def matmul(A, B, n, mod):
+    """Multiply two n×n matrices modulo mod"""
+    C = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                C[i][j] = (C[i][j] + A[i][k] * B[k][j]) % mod
+    return C
+
+def matpow(mat, k, n, mod):
+    """Compute mat^k using fast exponentiation"""
+    # Initialize result as identity matrix
+    result = [[1 if i == j else 0 for j in range(n)] for i in range(n)]
+    base = [row[:] for row in mat]  # Copy matrix
     
-    def matmul(A, B, n):
-        C = [[0] * n for _ in range(n)]
-        for i in range(n):
-            for j in range(n):
-                for k in range(n):
-                    C[i][j] = (C[i][j] + A[i][k] * B[k][j]) % MOD
-        return C
+    while k > 0:
+        if k % 2 == 1:
+            result = matmul(result, base, n, mod)
+        base = matmul(base, base, n, mod)
+        k //= 2
     
-    def matpow(mat, k, n):
-        result = [[1 if i == j else 0 for j in range(n)] for i in range(n)]
-        base = [row[:] for row in mat]
-        while k > 0:
-            if k % 2 == 1:
-                result = matmul(result, base, n)
-            base = matmul(base, base, n)
-            k //= 2
-        return result
+    return result
+
+def helper(mat, n, k):
+    mod = 10**9 + 7
     
-    n, k = map(int, input().split())
-    mat = [list(map(int, input().split())) for _ in range(n)]
+    # Compute mat^k
+    result_mat = matpow(mat, k, n, mod)
     
-    result_mat = matpow(mat, k, n)
-    
+    # Sum all entries in the result matrix
     total = 0
     for i in range(n):
         for j in range(n):
-            total = (total + result_mat[i][j]) % MOD
+            total = (total + result_mat[i][j]) % mod
     
-    print(total)
+    return total
 
-solve()
+n, k = map(int, input().split())
+mat = []
+for _ in range(n):
+    mat.append(list(map(int, input().split())))
+
+print(helper(mat, n, k))
+

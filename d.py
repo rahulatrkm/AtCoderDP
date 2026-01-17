@@ -2,16 +2,18 @@
 ps - https://atcoder.jp/contests/dp/tasks/dp_d
 '''
 
-def solve():
-    n, W = map(int, input().split())
-    items = [tuple(map(int, input().split())) for _ in range(n)]
-    
-    dp = [0] * (W + 1)
-    
-    for w, v in items:
-        for j in range(W, w - 1, -1):
-            dp[j] = max(dp[j], dp[j - w] + v)
-    
-    print(dp[W])
+def helper(w):
+    dp = [0]*(w+1)
+    for item_w, item_v in wv:
+        curr = dp.copy()
+        for wt in range(item_w, w+1):
+            if wt - item_w >= 0:
+                dp[wt] = max(dp[wt], curr[wt - item_w] + item_v)
+    return dp[-1]
 
-solve()
+n, w = map(int, input().split())
+wv = []
+for _ in range(n):
+    wv.append(tuple(map(int, input().split())))
+
+print(helper(w))        

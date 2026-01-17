@@ -1,32 +1,36 @@
 '''
 ps - https://atcoder.jp/contests/dp/tasks/dp_g
 '''
-import sys
 from collections import defaultdict
+import sys
 sys.setrecursionlimit(200000)
 
-def solve():
-    n, m = map(int, input().split())
+def helper(n, edges):
+    dp = [0]*n
+
     adj = defaultdict(list)
-    
-    for _ in range(m):
-        u, v = map(int, input().split())
+    for u, v in edges:
         adj[u].append(v)
-    
-    dp = [-1] * (n + 1)
-    
+
+    vis = set()
     def dfs(node):
-        if dp[node] != -1:
+        if node in vis:
             return dp[node]
-        dp[node] = 0
+        vis.add(node)
+        max_path = 0
         for neighbor in adj[node]:
-            dp[node] = max(dp[node], dfs(neighbor) + 1)
+            max_path = max(max_path, dfs(neighbor) + 1)
+        dp[node] = max_path
         return dp[node]
     
-    ans = 0
-    for i in range(1, n + 1):
-        ans = max(ans, dfs(i))
-    
-    print(ans)
+    for i in range(n):
+        dfs(i)
+    return max(dp)
 
-solve()
+n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u-1, v-1))
+print(helper(n, edges))
+        

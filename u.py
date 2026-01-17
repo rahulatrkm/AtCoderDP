@@ -2,19 +2,44 @@
 ps - https://atcoder.jp/contests/dp/tasks/dp_u
 '''
 
-def solve():
-    n = int(input())
-    arr = [list(map(int, input().split())) for _ in range(n)]
-    
+# grps = []
+# def helper(idx):
+#     n = len(arr)
+#     if idx == n:
+#         ans = 0
+#         for g in grps:
+#             for i in range(len(g)):
+#                 for j in range(i+1, len(g)):
+#                     ri, rj = g[i], g[j]
+#                     ans += arr[ri][rj]
+#         return ans
+#     # Option 1: Start new group
+#     grps.append([idx])
+#     ans1 = helper(idx + 1)
+#     grps.pop()
+#     # Option 2: Add to existing groups
+#     ans2 = 0
+#     for g in grps:
+#         g.append(idx)
+#         ans2 = max(ans2, helper(idx + 1))
+#         g.pop()
+#     return max(ans1, ans2)
+
+def helper():
+    n = len(arr)
     tot = 1 << n
-    dp = [0] * tot
-    
+    dp = [0]*tot
     for mask in range(tot):
-        members = [i for i in range(n) if (1 << i) & mask]
+        members = []
+        for i in range(n):
+            if (1 << i) & mask:
+                members.append(i)
+        # Calculate score for current group
         score = 0
         for i in range(len(members)):
-            for j in range(i + 1, len(members)):
-                score += arr[members[i]][members[j]]
+            for j in range(i+1, len(members)):
+                ri, rj = members[i], members[j]
+                score += arr[ri][rj]
         dp[mask] = score
     
     for mask in range(tot):
@@ -22,7 +47,11 @@ def solve():
         while submask:
             dp[mask] = max(dp[mask], dp[submask] + dp[mask ^ submask])
             submask = (submask - 1) & mask
-    
-    print(dp[-1])
+    return dp[-1]
 
-solve()
+
+n = int(input())
+arr = []
+for _ in range(n):
+    arr.append(list(map(int, input().split())))
+print(helper())

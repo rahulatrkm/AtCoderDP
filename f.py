@@ -2,21 +2,16 @@
 ps - https://atcoder.jp/contests/dp/tasks/dp_f
 '''
 
-def solve():
-    s = input().strip()
-    t = input().strip()
+def helper(s, t):
     m, n = len(s), len(t)
-    
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
+    dp = [[0]*(n+1) for _ in range(m+1)]
+    for i in range(1, m+1):
+        for j in range(1, n+1):
             if s[i-1] == t[j-1]:
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-    
-    # Backtrack to find LCS
+
     i, j = m, n
     lcs = []
     while i > 0 and j > 0:
@@ -24,11 +19,23 @@ def solve():
             lcs.append(s[i-1])
             i -= 1
             j -= 1
-        elif dp[i-1][j] > dp[i][j-1]:
+        elif dp[i][j] == dp[i-1][j]:
             i -= 1
         else:
             j -= 1
-    
-    print(''.join(reversed(lcs)))
 
-solve()
+    return "".join(lcs[::-1])
+
+s = input().strip()
+t = input().strip()
+print(helper(s, t))
+
+s = "axyb"
+t = "abyxb"
+print(helper(s, t))  # Expected: 3 (aby)
+
+print(helper("aa", "xayaz"))
+
+print(helper("a", "x"))
+
+print(helper("abracadabra", "avadakedavra"))
