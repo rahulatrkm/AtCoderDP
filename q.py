@@ -44,3 +44,40 @@ n = int(input())
 height = list(map(int, input().split()))
 beauty = list(map(int, input().split()))
 print(helper(beauty, height))
+
+
+'''
+# With BIT
+
+n = int(input())
+h = list(map(int, input().split()))
+a = list(map(int, input().split()))
+
+bit = [0]*(n+1)
+def update(idx, best):
+  idx += 1
+  while idx < len(bit):
+    bit[idx] = max(bit[idx], best)
+    idx += idx & (-idx)
+
+def query(idx):
+  best = 0
+  idx += 1
+  while idx > 0:
+    best = max(best, bit[idx])
+    idx -= idx & (-idx)
+  return best
+
+sor_h = sorted(h)
+rank = {v: i for i,v in enumerate(sor_h)}
+
+ans = 0
+for i in range(n):
+  r = rank[h[i]]
+  best = query(r-1) + a[i]
+  ans = max(ans, best)
+  update(r, best)
+  
+
+print(ans)
+'''

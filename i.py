@@ -13,6 +13,14 @@ def helper(idx, cnt):
     #         return 0
     # return helper(idx + 1, cnt + 1)*probabilities[idx] + helper(idx + 1, cnt)*(1 - probabilities[idx])
 
+    # dp = [0]*(n+1)
+    # dp[0] = 1
+    # for i in range(n):
+    #     for j in range(i+1, 0, -1):
+    #         dp[j] = dp[j]*(1-probabilities[i]) + dp[j-1]*probabilities[i]
+    #     dp[0] *= (1-probabilities[i])
+    # return sum(dp[(n//2 + 1):])
+
     n = len(probabilities)
     dp = [0]*(n+1)
     dp[0] = 1.0
